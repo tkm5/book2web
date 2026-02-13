@@ -31,7 +31,9 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: rich-dad-poor-dad/pnpm-lock.yaml
+          cache-dependency-path: |
+            rich-dad-poor-dad/pnpm-lock.yaml
+            learn-better/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -42,12 +44,23 @@ jobs:
         working-directory: rich-dad-poor-dad
         run: pnpm run build
 
+      # Build learn-better
+      - name: Install dependencies (learn-better)
+        working-directory: learn-better
+        run: pnpm install
+
+      - name: Build (learn-better)
+        working-directory: learn-better
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
           mkdir -p combined/rich-dad-poor-dad
+          mkdir -p combined/learn-better
           cp -r root/* combined/
           cp -r rich-dad-poor-dad/dist/* combined/rich-dad-poor-dad/
+          cp -r learn-better/dist/* combined/learn-better/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
