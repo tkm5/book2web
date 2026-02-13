@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   site: 'https://tkm5.github.io',
-  base: '/book2web',
+  base: '/book2web/rich-dad-poor-dad',
   integrations: [
     mdx(),
     sitemap(),

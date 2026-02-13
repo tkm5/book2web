@@ -31,17 +31,28 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+          cache-dependency-path: rich-dad-poor-dad/pnpm-lock.yaml
 
-      - name: Install dependencies
+      # Build rich-dad-poor-dad
+      - name: Install dependencies (rich-dad-poor-dad)
+        working-directory: rich-dad-poor-dad
         run: pnpm install
 
-      - name: Build with Astro
+      - name: Build (rich-dad-poor-dad)
+        working-directory: rich-dad-poor-dad
         run: pnpm run build
+
+      # Combine all outputs
+      - name: Combine outputs
+        run: |
+          mkdir -p combined/rich-dad-poor-dad
+          cp -r root/* combined/
+          cp -r rich-dad-poor-dad/dist/* combined/rich-dad-poor-dad/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./combined
 
   deploy:
     environment:
