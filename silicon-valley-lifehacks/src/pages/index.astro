@@ -1,0 +1,83 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getChapterEntries, getChapterPath } from '@/utils/books'
+import {
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  CHAPTER_CATEGORIES,
+  CATEGORY_LABELS,
+  CATEGORY_COLORS,
+} from '@/utils/constants'
+import type { Category } from '@/utils/constants'
+
+const chapters = await getChapterEntries()
+---
+
+<BaseLayout title="" description={SITE_DESCRIPTION}>
+  <main class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+    <!-- Hero -->
+    <section class="mb-16 text-center">
+      <h1 class="mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+        {SITE_TITLE}
+      </h1>
+      <p class="mx-auto max-w-2xl text-lg text-muted">
+        {SITE_DESCRIPTION}
+      </p>
+      <div class="mt-6 flex justify-center gap-4 text-sm text-muted">
+        <span>全{chapters.length}章</span>
+        <span>デイヴ・アスプリー著</span>
+      </div>
+    </section>
+
+    <!-- Chapter List -->
+    <section>
+      <h2 class="mb-8 text-xl font-semibold">章一覧</h2>
+      <div class="space-y-3">
+        {
+          chapters.map((chapter) => {
+            const category: Category = CHAPTER_CATEGORIES[chapter.data.chapterNumber] || 'intro'
+            const categoryLabel = CATEGORY_LABELS[category] || category
+            const colorClass = CATEGORY_COLORS[category] || ''
+
+            return (
+              <a
+                href={getChapterPath(chapter.data.chapterNumber)}
+                class="group flex items-center gap-4 rounded-lg border border-border p-4 transition-colors hover:border-accent hover:bg-card"
+              >
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-card text-xs font-medium text-muted group-hover:bg-accent/10 group-hover:text-accent">
+                  {chapter.data.chapterNumber}
+                </span>
+                <div class="min-w-0 flex-1">
+                  <h3 class="text-sm font-medium text-foreground group-hover:text-accent">
+                    {chapter.data.title}
+                  </h3>
+                  <p class="mt-0.5 text-xs text-muted line-clamp-1">
+                    {chapter.data.description}
+                  </p>
+                  <div class="mt-1">
+                    <span class:list={['inline-block rounded-full px-2 py-0.5 text-xs', colorClass]}>
+                      {categoryLabel}
+                    </span>
+                  </div>
+                </div>
+                <svg
+                  class="h-4 w-4 shrink-0 text-muted transition-transform group-hover:translate-x-1 group-hover:text-accent"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+            )
+          })
+        }
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -34,6 +34,7 @@ jobs:
           cache-dependency-path: |
             rich-dad-poor-dad/pnpm-lock.yaml
             learn-better/pnpm-lock.yaml
+            silicon-valley-lifehacks/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -53,14 +54,25 @@ jobs:
         working-directory: learn-better
         run: pnpm run build
 
+      # Build silicon-valley-lifehacks
+      - name: Install dependencies (silicon-valley-lifehacks)
+        working-directory: silicon-valley-lifehacks
+        run: pnpm install
+
+      - name: Build (silicon-valley-lifehacks)
+        working-directory: silicon-valley-lifehacks
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
           mkdir -p combined/rich-dad-poor-dad
           mkdir -p combined/learn-better
+          mkdir -p combined/silicon-valley-lifehacks
           cp -r root/* combined/
           cp -r rich-dad-poor-dad/dist/* combined/rich-dad-poor-dad/
           cp -r learn-better/dist/* combined/learn-better/
+          cp -r silicon-valley-lifehacks/dist/* combined/silicon-valley-lifehacks/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
