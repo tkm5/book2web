@@ -1,0 +1,66 @@
+---
+import { buildChapterList } from '@/utils/navigation'
+
+interface Props {
+  currentChapter?: number
+}
+
+const { currentChapter } = Astro.props
+const chapterList = await buildChapterList()
+---
+
+<aside
+  id="sidebar"
+  class="fixed top-14 left-0 z-40 h-[calc(100vh-3.5rem)] w-[280px] -translate-x-full overflow-y-auto border-r border-border bg-background transition-transform lg:translate-x-0"
+>
+  <nav class="p-4" aria-label="章ナビゲーション">
+    <h2 class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-muted">
+      目次
+    </h2>
+    <ul class="space-y-0.5">
+      {
+        chapterList.map((chapter) => {
+          const isCurrentChapter = chapter.chapterNumber === currentChapter
+
+          return (
+            <li>
+              <a
+                href={chapter.path}
+                class:list={[
+                  'block rounded-md px-3 py-2 text-sm transition-colors',
+                  isCurrentChapter
+                    ? 'bg-accent/10 font-medium text-accent'
+                    : 'text-muted hover:bg-card hover:text-foreground',
+                ]}
+              >
+                <span class="mr-2 inline-flex h-5 w-5 items-center justify-center rounded text-xs">
+                  {chapter.chapterNumber}
+                </span>
+                {chapter.title}
+              </a>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </nav>
+</aside>
+
+<script>
+  // Mobile sidebar toggle
+  const menuBtn = document.getElementById('mobile-menu-btn')
+  const sidebar = document.getElementById('sidebar')
+
+  menuBtn?.addEventListener('click', () => {
+    sidebar?.classList.toggle('-translate-x-full')
+  })
+
+  // Close sidebar on link click (mobile)
+  sidebar?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 1024) {
+        sidebar?.classList.add('-translate-x-full')
+      }
+    })
+  })
+</script>

@@ -35,6 +35,7 @@ jobs:
             rich-dad-poor-dad/pnpm-lock.yaml
             learn-better/pnpm-lock.yaml
             silicon-valley-lifehacks/pnpm-lock.yaml
+            almanack-of-naval/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -63,16 +64,27 @@ jobs:
         working-directory: silicon-valley-lifehacks
         run: pnpm run build
 
+      # Build almanack-of-naval
+      - name: Install dependencies (almanack-of-naval)
+        working-directory: almanack-of-naval
+        run: pnpm install
+
+      - name: Build (almanack-of-naval)
+        working-directory: almanack-of-naval
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
           mkdir -p combined/rich-dad-poor-dad
           mkdir -p combined/learn-better
           mkdir -p combined/silicon-valley-lifehacks
+          mkdir -p combined/almanack-of-naval
           cp -r root/* combined/
           cp -r rich-dad-poor-dad/dist/* combined/rich-dad-poor-dad/
           cp -r learn-better/dist/* combined/learn-better/
           cp -r silicon-valley-lifehacks/dist/* combined/silicon-valley-lifehacks/
+          cp -r almanack-of-naval/dist/* combined/almanack-of-naval/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
