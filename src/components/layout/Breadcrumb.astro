@@ -1,0 +1,58 @@
+---
+import { BOOKS } from '@/utils/constants'
+import type { BookId } from '@/utils/constants'
+import { getBookPath, withBase } from '@/utils/books'
+
+interface Props {
+  bookId?: BookId
+  chapterNumber?: number
+  chapterTitle?: string
+}
+
+const { bookId, chapterNumber, chapterTitle } = Astro.props
+
+const items: { label: string; href?: string }[] = [{ label: 'ホーム', href: withBase('/') }]
+
+if (bookId) {
+  const book = BOOKS[bookId]
+  const bookTitle = book?.shortTitle || bookId
+  items.push({
+    label: bookTitle,
+    href: chapterNumber ? getBookPath(bookId) : undefined,
+  })
+}
+
+if (bookId && chapterNumber && chapterTitle) {
+  items.push({
+    label: `第${chapterNumber}章: ${chapterTitle}`,
+  })
+}
+---
+
+<nav aria-label="パンくずリスト" class="mb-4 text-sm">
+  <ol class="flex flex-wrap items-center gap-1 text-muted">
+    {
+      items.map((item, i) => (
+        <li class="flex items-center gap-1">
+          {i > 0 && (
+            <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          )}
+          {item.href ? (
+            <a href={item.href} class="hover:text-foreground">
+              {item.label}
+            </a>
+          ) : (
+            <span class="text-foreground">{item.label}</span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
