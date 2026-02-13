@@ -1,0 +1,83 @@
+---
+import BookLayout from '@/layouts/BookLayout.astro'
+import { getBookGroups, getChapterPath } from '@/utils/books'
+import {
+  BOOKS,
+  BOOK_ORDER,
+  CHAPTER_CATEGORIES,
+  CATEGORY_LABELS,
+  CATEGORY_COLORS,
+} from '@/utils/constants'
+import type { BookId, Category } from '@/utils/constants'
+
+export function getStaticPaths() {
+  return BOOK_ORDER.map((bookId) => ({
+    params: { book: bookId },
+  }))
+}
+
+const { book: bookId } = Astro.params as { book: BookId }
+const bookInfo = BOOKS[bookId]
+
+const bookGroups = await getBookGroups()
+const currentGroup = bookGroups.find((g) => g.bookId === bookId)
+const chapters = currentGroup?.chapters || []
+---
+
+<BookLayout
+  title={bookInfo.title}
+  description={bookInfo.description}
+  bookId={bookId}
+>
+  <p class="mb-8 text-muted">
+    {bookInfo.description}
+  </p>
+  <p class="mb-6 text-sm text-muted">
+    この書籍には {chapters.length} 個の章があります．
+  </p>
+
+  <div class="space-y-3">
+    {
+      chapters.map((chapter) => {
+        const chapterCategories = CHAPTER_CATEGORIES[bookId] || {}
+        const category: Category = chapterCategories[chapter.data.chapterNumber] || 'mindset'
+        const categoryLabel = CATEGORY_LABELS[category] || category
+        const colorClass = CATEGORY_COLORS[category] || ''
+
+        return (
+          <a
+            href={getChapterPath(bookId, chapter.data.chapterNumber)}
+            class="group flex items-center gap-4 rounded-lg border border-border p-4 transition-colors hover:border-accent hover:bg-card"
+          >
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-card text-xs font-medium text-muted group-hover:bg-accent/10 group-hover:text-accent">
+              {chapter.data.chapterNumber}
+            </span>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-sm font-medium text-foreground group-hover:text-accent">
+                {chapter.data.title}
+              </h3>
+              <div class="mt-1">
+                <span class:list={['inline-block rounded-full px-2 py-0.5 text-xs', colorClass]}>
+                  {categoryLabel}
+                </span>
+              </div>
+            </div>
+            <svg
+              class="h-4 w-4 shrink-0 text-muted transition-transform group-hover:translate-x-1 group-hover:text-accent"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </a>
+        )
+      })
+    }
+  </div>
+</BookLayout>

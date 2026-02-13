@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content'
+import ChapterLayout from '@/layouts/ChapterLayout.astro'
+import { getAdjacentChapters } from '@/utils/navigation'
+import { padChapter } from '@/utils/books'
+import type { BookId } from '@/utils/constants'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('books')
+  return entries.map((entry) => ({
+    params: {
+      book: entry.data.bookId,
+      chapter: padChapter(entry.data.chapterNumber),
+    },
+    props: { entry },
+  }))
+}
+
+const { entry } = Astro.props
+const { Content, headings } = await render(entry)
+const { bookId, chapterNumber, title, description } = entry.data
+const { prev, next } = await getAdjacentChapters(bookId, chapterNumber)
+---
+
+<ChapterLayout
+  title={title}
+  description={description}
+  bookId={bookId as BookId}
+  chapterNumber={chapterNumber}
+  chapterTitle={title}
+  headings={headings}
+  prev={prev}
+  next={next}
+>
+  <Content />
+</ChapterLayout>

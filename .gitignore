@@ -24,7 +24,7 @@ pnpm-debug.log*
 *.pdf
 
 # PDF converted markdown
-books/
+/books/
 
 # Claude Code
 .claude/
