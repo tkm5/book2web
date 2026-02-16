@@ -36,6 +36,7 @@ jobs:
             learn-better/pnpm-lock.yaml
             silicon-valley-lifehacks/pnpm-lock.yaml
             almanack-of-naval/pnpm-lock.yaml
+            bulletproof-problem-solving/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -73,6 +74,15 @@ jobs:
         working-directory: almanack-of-naval
         run: pnpm run build
 
+      # Build bulletproof-problem-solving
+      - name: Install dependencies (bulletproof-problem-solving)
+        working-directory: bulletproof-problem-solving
+        run: pnpm install
+
+      - name: Build (bulletproof-problem-solving)
+        working-directory: bulletproof-problem-solving
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
@@ -85,6 +95,8 @@ jobs:
           cp -r learn-better/dist/* combined/learn-better/
           cp -r silicon-valley-lifehacks/dist/* combined/silicon-valley-lifehacks/
           cp -r almanack-of-naval/dist/* combined/almanack-of-naval/
+          mkdir -p combined/bulletproof-problem-solving
+          cp -r bulletproof-problem-solving/dist/* combined/bulletproof-problem-solving/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
