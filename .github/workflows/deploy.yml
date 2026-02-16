@@ -37,6 +37,7 @@ jobs:
             silicon-valley-lifehacks/pnpm-lock.yaml
             almanack-of-naval/pnpm-lock.yaml
             bulletproof-problem-solving/pnpm-lock.yaml
+            algorithm-shikojutsu/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -83,6 +84,15 @@ jobs:
         working-directory: bulletproof-problem-solving
         run: pnpm run build
 
+      # Build algorithm-shikojutsu
+      - name: Install dependencies (algorithm-shikojutsu)
+        working-directory: algorithm-shikojutsu
+        run: pnpm install
+
+      - name: Build (algorithm-shikojutsu)
+        working-directory: algorithm-shikojutsu
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
@@ -97,6 +107,8 @@ jobs:
           cp -r almanack-of-naval/dist/* combined/almanack-of-naval/
           mkdir -p combined/bulletproof-problem-solving
           cp -r bulletproof-problem-solving/dist/* combined/bulletproof-problem-solving/
+          mkdir -p combined/algorithm-shikojutsu
+          cp -r algorithm-shikojutsu/dist/* combined/algorithm-shikojutsu/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
