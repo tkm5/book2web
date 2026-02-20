@@ -38,6 +38,7 @@ jobs:
             almanack-of-naval/pnpm-lock.yaml
             bulletproof-problem-solving/pnpm-lock.yaml
             algorithm-shikojutsu/pnpm-lock.yaml
+            pyramid-principle/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -93,6 +94,15 @@ jobs:
         working-directory: algorithm-shikojutsu
         run: pnpm run build
 
+      # Build pyramid-principle
+      - name: Install dependencies (pyramid-principle)
+        working-directory: pyramid-principle
+        run: pnpm install
+
+      - name: Build (pyramid-principle)
+        working-directory: pyramid-principle
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
@@ -109,6 +119,8 @@ jobs:
           cp -r bulletproof-problem-solving/dist/* combined/bulletproof-problem-solving/
           mkdir -p combined/algorithm-shikojutsu
           cp -r algorithm-shikojutsu/dist/* combined/algorithm-shikojutsu/
+          mkdir -p combined/pyramid-principle
+          cp -r pyramid-principle/dist/* combined/pyramid-principle/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
