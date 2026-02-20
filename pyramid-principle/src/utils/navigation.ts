@@ -1,11 +1,13 @@
 import { getCollection } from 'astro:content'
 import type { ChapterEntry } from './books'
 import { getChapterPath } from './books'
+import { getPartForChapter } from './constants'
 
 export interface NavItem {
   title: string
   path: string
   chapterNumber: number
+  partTitle?: string
 }
 
 /**
@@ -20,6 +22,7 @@ export async function buildChapterList(): Promise<NavItem[]> {
       title: entry.data.title,
       path: getChapterPath(entry.data.chapterNumber),
       chapterNumber: entry.data.chapterNumber,
+      partTitle: getPartForChapter(entry.data.chapterNumber)?.title,
     }))
 }
 

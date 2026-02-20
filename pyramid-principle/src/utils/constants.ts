@@ -53,3 +53,21 @@ export const CHAPTER_CATEGORIES: Record<number, Category> = {
   12: 'problem-solving',
   13: 'expression',
 }
+
+export interface Part {
+  id: string
+  title: string
+  chapters: number[]
+}
+
+export const PARTS: Part[] = [
+  { id: 'part-1', title: '第I部 書く技術', chapters: [1, 2, 3, 4, 5] },
+  { id: 'part-2', title: '第II部 考える技術', chapters: [6, 7] },
+  { id: 'part-3', title: '第III部 問題解決の技術', chapters: [8, 9] },
+  { id: 'part-4', title: '第IV部 表現の技術', chapters: [10, 11] },
+  { id: 'appendix', title: '追補', chapters: [12, 13] },
+]
+
+export function getPartForChapter(chapterNumber: number): Part | undefined {
+  return PARTS.find((p) => p.chapters.includes(chapterNumber))
+}
