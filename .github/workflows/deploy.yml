@@ -39,6 +39,7 @@ jobs:
             bulletproof-problem-solving/pnpm-lock.yaml
             algorithm-shikojutsu/pnpm-lock.yaml
             pyramid-principle/pnpm-lock.yaml
+            google-software-engineering/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -103,6 +104,15 @@ jobs:
         working-directory: pyramid-principle
         run: pnpm run build
 
+      # Build google-software-engineering
+      - name: Install dependencies (google-software-engineering)
+        working-directory: google-software-engineering
+        run: pnpm install
+
+      - name: Build (google-software-engineering)
+        working-directory: google-software-engineering
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
@@ -121,6 +131,8 @@ jobs:
           cp -r algorithm-shikojutsu/dist/* combined/algorithm-shikojutsu/
           mkdir -p combined/pyramid-principle
           cp -r pyramid-principle/dist/* combined/pyramid-principle/
+          mkdir -p combined/google-software-engineering
+          cp -r google-software-engineering/dist/* combined/google-software-engineering/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
