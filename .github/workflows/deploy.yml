@@ -41,6 +41,7 @@ jobs:
             pyramid-principle/pnpm-lock.yaml
             google-software-engineering/pnpm-lock.yaml
             housing-purchase-thinking/pnpm-lock.yaml
+            hilgard-psychology/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -123,6 +124,15 @@ jobs:
         working-directory: housing-purchase-thinking
         run: pnpm run build
 
+      # Build hilgard-psychology
+      - name: Install dependencies (hilgard-psychology)
+        working-directory: hilgard-psychology
+        run: pnpm install
+
+      - name: Build (hilgard-psychology)
+        working-directory: hilgard-psychology
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
@@ -145,6 +155,8 @@ jobs:
           cp -r google-software-engineering/dist/* combined/google-software-engineering/
           mkdir -p combined/housing-purchase-thinking
           cp -r housing-purchase-thinking/dist/* combined/housing-purchase-thinking/
+          mkdir -p combined/hilgard-psychology
+          cp -r hilgard-psychology/dist/* combined/hilgard-psychology/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
