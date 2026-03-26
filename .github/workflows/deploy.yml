@@ -40,6 +40,7 @@ jobs:
             algorithm-shikojutsu/pnpm-lock.yaml
             pyramid-principle/pnpm-lock.yaml
             google-software-engineering/pnpm-lock.yaml
+            housing-purchase-thinking/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -113,6 +114,15 @@ jobs:
         working-directory: google-software-engineering
         run: pnpm run build
 
+      # Build housing-purchase-thinking
+      - name: Install dependencies (housing-purchase-thinking)
+        working-directory: housing-purchase-thinking
+        run: pnpm install
+
+      - name: Build (housing-purchase-thinking)
+        working-directory: housing-purchase-thinking
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
@@ -133,6 +143,8 @@ jobs:
           cp -r pyramid-principle/dist/* combined/pyramid-principle/
           mkdir -p combined/google-software-engineering
           cp -r google-software-engineering/dist/* combined/google-software-engineering/
+          mkdir -p combined/housing-purchase-thinking
+          cp -r housing-purchase-thinking/dist/* combined/housing-purchase-thinking/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
