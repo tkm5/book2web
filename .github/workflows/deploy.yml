@@ -43,6 +43,7 @@ jobs:
             housing-purchase-thinking/pnpm-lock.yaml
             hilgard-psychology/pnpm-lock.yaml
             search-inside-yourself/pnpm-lock.yaml
+            the-big-con/pnpm-lock.yaml
 
       # Build rich-dad-poor-dad
       - name: Install dependencies (rich-dad-poor-dad)
@@ -143,6 +144,15 @@ jobs:
         working-directory: search-inside-yourself
         run: pnpm run build
 
+      # Build the-big-con
+      - name: Install dependencies (the-big-con)
+        working-directory: the-big-con
+        run: pnpm install
+
+      - name: Build (the-big-con)
+        working-directory: the-big-con
+        run: pnpm run build
+
       # Combine all outputs
       - name: Combine outputs
         run: |
@@ -169,6 +179,8 @@ jobs:
           cp -r hilgard-psychology/dist/* combined/hilgard-psychology/
           mkdir -p combined/search-inside-yourself
           cp -r search-inside-yourself/dist/* combined/search-inside-yourself/
+          mkdir -p combined/the-big-con
+          cp -r the-big-con/dist/* combined/the-big-con/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
